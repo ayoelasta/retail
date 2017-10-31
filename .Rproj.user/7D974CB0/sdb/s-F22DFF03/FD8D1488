@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "\n\n",
+    "contents" : "\ntrain <- read.csv(\"data/train.csv\", stringsAsFactors = FALSE)\ntest <- read.csv(\"data/test.csv\", stringsAsFactors = FALSE)\n\ntrain$User_ID <- as.factor(train$User_ID)\ntest$User_ID <- as.factor(test$User_ID)\n\ntrain$Product_ID <- as.factor(train$Product_ID)\ntest$Product_ID <- as.factor(test$Product_ID)\n\ntrain$Gender <- as.factor(train$Gender)\ntest$Gender <- as.factor(test$Gender)\n\ntrain$City_category <- as.factor(train$City_category)\ntest$City_category <- as.factor(test$City_category)\n\ntrain$Marital_Status <- as.factor(train$Marital_Status)\ntest$Marital_Status <- as.factor(test$Marital_Status)\n\n\n\ntrain$source <- \"train\"\ntest$source <- \"test\"\ntest$Purchase <- 0\n\ndf <- rbind(train, test)\n\nsummary(df)\n",
     "created" : 1509452307888.000,
-    "dirty" : false,
+    "dirty" : true,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1541608299",
+    "hash" : "2072939891",
     "id" : "FD8D1488",
     "lastKnownWriteTime" : 1509453105,
-    "last_content_update" : 1509453105183,
+    "last_content_update" : 1509463941640,
     "path" : "C:/Users/AyodejiAkiwowo/Source/Repos/retail/retail.R",
     "project_path" : "retail.R",
     "properties" : {

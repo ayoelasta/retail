@@ -33,6 +33,8 @@ Definition <- c("User ID", "Product ID", "Sex of User", "Age in bins", "Occupati
 a <- data.frame(Variable, Definition)
 knitr::kable(a, caption = "Variables in dataset")
 ```
+
+
 Two datasets were provided for the hack - the training and test datasets with 12 and 11 variables respectively. The "Purchase Amount" is the target variable and is hence missing from the test data. 
 
 
@@ -55,14 +57,70 @@ str(train)
 
 str(test)
 ```
-The training and test datasets are read into R and stored as train (550068 rows) and test (233599 rows) 
+The training and test datasets are read into R and stored as train (550068 rows) and test (233599 rows). The summary statistics below show that for the training data, asides from Product Category 2 and Product Category 3, none of the variables have any missing values. The missing product categories is not unexpected as the data dictionary has explained that a product may belong to more than one category. Since Product category 1 has no NA, we may safely assume that the product belongs to category 1 if both categories 2 and 3 are NAs.
 
 
+## Data Preparation
 
+The Product_ID and USer_ID are interesting features. In many cases, these are usually discarded but in this case, I will keep them till I am sure they are not needed. They have been read in as characters and will be trandformed to factors. The Gender, City_category, Marital_Status, Product Categories and Occupation will also be transformed to factors.
+
+In addition, the 
+
+```{r}
+train$User_ID <- as.factor(train$User_ID)
+test$User_ID <- as.factor(test$User_ID)
+
+train$Product_ID <- as.factor(train$Product_ID)
+test$Product_ID <- as.factor(test$Product_ID)
+
+train$Gender <- as.factor(train$Gender)
+test$Gender <- as.factor(test$Gender)
+
+train$City_Category <- as.factor(train$City_Category)
+test$City_Category <- as.factor(test$City_Category)
+
+train$Marital_Status <- as.factor(train$Marital_Status)
+test$Marital_Status <- as.factor(test$Marital_Status)
+
+train$Occupation <- as.factor(train$Occupation)
+test$Occupation <- as.factor(test$Occupation)
+
+train$Product_Category_1 <- as.factor(train$Product_Category_1)
+test$Product_Category_1 <- as.factor(test$Product_Category_1)
+
+train$Product_Category_2 <- as.factor(train$Product_Category_2)
+test$Product_Category_2 <- as.factor(test$Product_Category_2)
+
+train$Product_Category_3 <- as.factor(train$Product_Category_3)
+test$Product_Category_3 <- as.factor(test$Product_Category_3)
+```
 **Summary statistics:**
 
 ```{r}
 summary(train)
 ```
 
+```{r}
+summary(test)
+```
 **Define Hypotheses**
+
+1. **Product:** The lower the cost of a product, the higher the number of purchases (count)
+
+2. **Gender:** Women spend more on purchases than men
+
+3. **Occupation:** Certain types of occupations (likely dependent on salary band) will have higher purchases
+
+4. **Age:** The older you are, the less you purchase (count and amount spent)
+
+5. **Stay in current city:** The longer you stay in the city, the more purchases you make
+
+6. **Product Category:** The category a product belongs to determines which Gender will have higher purchase (count)
+
+7. **Product Category:** The category a product belongs to determines which Age band will have higher purchase (count)
+
+### Exploratory Data Analysis
+Before exploring further, I combined both the train and datasets in order to have a broader view of the dataset. However, I created a new variable "Source" which acts as label for the two sets and added a variable Purchase for the test set to allow for rbinding. All rows in the purch
+```{r}
+
+```
