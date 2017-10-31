@@ -41,6 +41,7 @@ Two datasets were provided for the hack - the training and test datasets with 12
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
+library(magrittr)
 
 ```
 
@@ -105,7 +106,7 @@ summary(test)
 ```
 **Define Hypotheses**
 
-1. **Product:** The lower the cost of a product, the higher the number of purchases (count)
+1. **Product:** The lower the cost of a product, the higher the number of purchases (count).
 
 2. **Gender:** Women spend more on purchases than men
 
@@ -120,7 +121,33 @@ summary(test)
 7. **Product Category:** The category a product belongs to determines which Age band will have higher purchase (count)
 
 ### Exploratory Data Analysis
-Before exploring further, I combined both the train and datasets in order to have a broader view of the dataset. However, I created a new variable "Source" which acts as label for the two sets and added a variable Purchase for the test set to allow for rbinding. All rows in the purch
+Before exploring further, I combined both the train and datasets in order to have a broader view of the dataset. However, I created a new variable "Source" which acts as label for the two sets and added a variable Purchase for the test set to allow for rbinding. NAs are assigned to this new variable in the test data.
+
+```{r}
+train$source <- "train"
+test$source <- "test"
+test$Purchase <- NA
+```
+
+```{r}
+df <- rbind(train, test)
+```
+
 ```{r}
 
+summary(df)
+
 ```
+
+```{r}
+df %>% count(User_ID) %>%
+  arrange(desc(n)) %>%
+  head(10) %>%
+  ggplot(aes(User_ID, n)) + geom_bar(stat = "identity")
+
+```
+
+
+The plot above shows the top 10 users in terms of counts for the dataset. User 1001680 has the highest number of purchases (1468).
+
+**** Continue from here ****

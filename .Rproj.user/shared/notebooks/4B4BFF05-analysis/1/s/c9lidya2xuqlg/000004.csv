@@ -1,0 +1,4 @@
+"0","df %>% count(User_ID) %>%"
+"0","  arrange(desc(n)) %>%"
+"0","  head(10) %>%"
+"0","  ggplot(aes(User_ID, n)) + geom_bar(stat = ""identity"")"
