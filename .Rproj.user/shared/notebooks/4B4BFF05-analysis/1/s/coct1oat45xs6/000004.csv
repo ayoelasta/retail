@@ -1,0 +1,4 @@
+"0","Variable <- c(""User_ID"", ""Product_ID"", ""Gender"", ""Age"", ""Occupation"", ""City_Category"", ""Stay_In_Current_City_Years"", ""Marital_Status"", ""Product_Category_1"", ""Product_Category_2"", ""Product_Category_3"", ""Purchase"")"
+"0","Definition <- c(""User ID"", ""Product ID"", ""Sex of User"", ""Age in bins"", ""Occupation (Masked"", ""Category of the City (A,B,C)"", ""Number of Years stay in current city"", ""Marital Status"", ""Product Category (Masked)"", ""Product may belong to other category also (Masked)"", ""Product may belong to other category also (Masked)"", ""Purchase Amount (Target Variable)"")"
+"0","a <- data.frame(Variable, Definition)"
+"0","knitr::kable(a, caption = ""Variables in dataset"")"
