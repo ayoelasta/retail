@@ -42,7 +42,8 @@ Two datasets were provided for the hack - the training and test datasets with 12
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(magrittr)
-
+library(grid)
+library(gridExtra)
 ```
 
 
@@ -175,3 +176,22 @@ df %>% ggplot(aes(Gender)) + geom_bar()
 
 In the first instance, from the dataset, there are more men than women. As this is a selected dataset, it will be difficult to make bold conclusions as we do not know how the data was selected. The next step is to look at the total amount spent by both men and females. Remember that only the "train" labeled data have purchase amount linked to them. Hence we will restrict our totals to this section only.
 
+```{r}
+p1 <- df %>% filter(source == "train") %>%
+  group_by(Gender) %>%
+  summarize(totalPurchases = sum(as.numeric(Purchase), na.rm = TRUE),
+            count = n()) %>%
+  ggplot() + geom_bar(aes(Gender, totalPurchases), stat = "identity")
+
+p2 <- df %>% filter(source == "train") %>%
+  group_by(Gender) %>%
+  summarize(meanPurchases = mean(as.numeric(Purchase), na.rm = TRUE),
+            count = n()) %>%
+  ggplot() + geom_bar(aes(Gender, meanPurchases), stat = "identity")
+
+
+grid.arrange(p1, p2, widths = c(0.5, 0.8))
+```
+
+
+In terms of the total purchases, there's a significant difference in the amount of money spent by males and females. This is most likely due to the large disparity in the number of men and women purchases in the data. A better way to look at purchases is to view it from an average point of view. In essence, how much does a person spend per visit. This is reflected in the second plot (right) showing the meanPurchases. This shows that although the men still lead in terms of purchases, the difference is not that much from the women.

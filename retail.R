@@ -48,9 +48,17 @@ summarize(countt = n_distinct(User_ID)) %>%
 df %>% ggplot(aes(Gender)) + geom_bar()
 
 # purchase amount by gender
-df %>% filter(source == "train") %>%
+p1 <- df %>% filter(source == "train") %>%
   group_by(Gender) %>%
-  summarize(totalPurchases = sum(Purchase, na.rm = TRUE))
+  summarize(totalPurchases = sum(as.numeric(Purchase), na.rm = TRUE),
+            count = n()) %>%
+  ggplot() + geom_bar(aes(Gender, totalPurchases), stat = "identity")
+
+p2 <- df %>% filter(source == "train") %>%
+  group_by(Gender) %>%
+  summarize(meanPurchases = mean(as.numeric(Purchase), na.rm = TRUE),
+            count = n()) %>%
+  ggplot() + geom_bar(aes(Gender, meanPurchases), stat = "identity")
 
 
-df %>% filter(source == "train") %>% summary()  
+grid.arrange(p1, p2, widths = c(0.5, 0.8))
