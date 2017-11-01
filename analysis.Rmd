@@ -111,7 +111,7 @@ summary(test)
 
 2. **Gender:** Women spend more on purchases than men
 
-3. **Occupation:** Certain types of occupations (likely dependent on salary band) will have higher purchases
+3. **Occupation:** Certain types of occupations (dependent on salary band) will have higher purchases
 
 4. **Age:** The older you are, the less you purchase (count and amount spent)
 
@@ -160,7 +160,7 @@ df %>% group_by(User_ID) %>%
   summarize(tot = n(), gend = first(Gender)) %>%
   arrange(desc(tot)) %>%
   head(20) %>%
-  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(stat = "identity") +
+  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(alpha = 0.7, stat = "identity") +
   labs(x = "USER", y = "Total number of purchases", fill = "Gender") + 
   ggtitle("Number of purchases by each user showing their gender") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
@@ -170,7 +170,7 @@ df %>% group_by(User_ID) %>%
 Again, there is just one female user in the top 20. This is somewhat not accepting our second hypothesis of women spending more on shopping than men. To confirm this, let's look at the gender variable in terms of the number of purchases and also in terms of how much was spent on purchases
 
 ```{r}
-df %>% ggplot(aes(Gender)) + geom_bar()
+df %>% ggplot(aes(Gender)) + geom_bar(alpha = 0.7)
 ```
 
 
@@ -181,17 +181,46 @@ p1 <- df %>% filter(source == "train") %>%
   group_by(Gender) %>%
   summarize(totalPurchases = sum(as.numeric(Purchase), na.rm = TRUE),
             count = n()) %>%
-  ggplot() + geom_bar(aes(Gender, totalPurchases), stat = "identity")
+  ggplot() + geom_bar(fill = "blue", alpha = 0.7, aes(Gender, totalPurchases), stat = "identity")
 
 p2 <- df %>% filter(source == "train") %>%
   group_by(Gender) %>%
   summarize(meanPurchases = mean(as.numeric(Purchase), na.rm = TRUE),
             count = n()) %>%
-  ggplot() + geom_bar(aes(Gender, meanPurchases), stat = "identity")
+  ggplot() + geom_bar(fill = "blue", alpha = 0.7, aes(Gender, meanPurchases), stat = "identity")
 
 
 grid.arrange(p1, p2, widths = c(0.5, 0.8))
 ```
 
 
-In terms of the total purchases, there's a significant difference in the amount of money spent by males and females. This is most likely due to the large disparity in the number of men and women purchases in the data. A better way to look at purchases is to view it from an average point of view. In essence, how much does a person spend per visit. This is reflected in the second plot (right) showing the meanPurchases. This shows that although the men still lead in terms of purchases, the difference is not that much from the women.
+In terms of the total purchases, there's a significant difference in the amount of money spent by males and females. This is most likely due to the large disparity in the number of men and women purchases in the data. A better way to look at purchases is to view it from an average point of view. In essence, how much does a person spend per visit. This is reflected in the second plot (right) showing the meanPurchases. This shows that although the men still lead in terms of purchases, the difference is not that much from the women. However, this means that our second hypothesis is not accepted.
+
+**Occupation**
+The variable "Occupation" defines the occupation of the customers. The real occupation is masked so we only know they are from group 0 to 20. We do not know what these numbers stand for except that they refer to different occupations. 
+
+```{r}
+df %>% group_by(User_ID) %>%
+  summarize(Occ = first(Occupation)) %>%
+  ggplot(aes(Occ)) + geom_bar() + labs(x = "Occupation", y = "No. of Purchases", title = "Number of purchases made based on Occupation")
+```
+
+
+Occupation 4 has the highest number of purchases followed by Occupation 0 and then 7. This means that people with occupation 4 made the highest number of purchases at the store. On the other hand, people with Occupation 8 made the least number of purchases. How do these purchases compare with sales?
+
+```{r}
+df %>% filter(source == "train") %>%
+  group_by(User_ID) %>%
+  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%
+  ggplot(aes(Occ,sumOcc)) + geom_bar(fill = "blue", stat = "identity")
+```
+
+
+There are no suprises in terms of the amount spent compared with the number of purchases. Occupation 4 still leads (666244484) followed by Occupation 0 (635406958). This is due to the large differences between the count of purchases. When we take a cursory look at the Occupations with little differences in the counts of purchases, some slight deviations will be noticed. For example, whilst there's not much pronounced difference in the number of purchases made between occupations 15 and 13, the difference is noticeable in the amount of money spent. Also, occupation 13 seems to have made more purchases than occupation 11 but the latter spent more money on purchases than the former.
+
+```{r}
+df %>% filter(source == "train") %>%
+  group_by(User_ID) %>%
+  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%
+  ggplot(aes(Occ,sumOcc)) + geom_bar(fill = "blue", stat = "identity")
+```

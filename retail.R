@@ -62,3 +62,15 @@ p2 <- df %>% filter(source == "train") %>%
 
 
 grid.arrange(p1, p2, widths = c(0.5, 0.8))
+
+n_distinct(df$User_ID)
+
+# Purchases by occupation
+df %>% filter(source == "train") %>%
+  group_by(User_ID) %>%
+  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%
+  group_by(Occ) %>%
+  summarize(summ = sum(sumOcc)) %>%
+  arrange(desc(summ))
+
+
