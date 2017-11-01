@@ -1,0 +1,8 @@
+"0","df %>% group_by(User_ID) %>%"
+"0","  summarize(tot = n(), gend = first(Gender)) %>%"
+"0","  arrange(desc(tot)) %>%"
+"0","  head(20) %>%"
+"0","  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(stat = ""identity"") +"
+"0","  labs(x = ""USER"", y = ""Total number of purchases"", fill = ""Gender"") + "
+"0","  ggtitle(""Number of purchases by each user showing their gender"") +"
+"0","  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))"

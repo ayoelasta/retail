@@ -140,14 +140,38 @@ summary(df)
 ```
 
 ```{r}
-df %>% count(User_ID) %>%
-  arrange(desc(n)) %>%
+df %>% group_by(User_ID) %>%
+  summarize(tot = n(), gend = first(Gender)) %>%
+  arrange(desc(tot)) %>%
   head(10) %>%
-  ggplot(aes(User_ID, n)) + geom_bar(stat = "identity")
+  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(stat = "identity") +
+  labs(x = "USER", y = "Total number of purchases", fill = "Gender") + 
+  ggtitle("Number of purchases by each user showing their gender")
 
 ```
 
 
-The plot above shows the top 10 users in terms of counts for the dataset. User 1001680 has the highest number of purchases (1468).
+The plot above shows the top 10 users in terms of counts for the dataset. User 1001680 has the highest number of purchases (1468). We can also see that from the top 10 purchasers, there are 9 males and 1 female. To have a wider view, we will extend this to the top 20 in the next plot.
 
-**** Continue from here ****
+
+```{r}
+df %>% group_by(User_ID) %>%
+  summarize(tot = n(), gend = first(Gender)) %>%
+  arrange(desc(tot)) %>%
+  head(20) %>%
+  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(stat = "identity") +
+  labs(x = "USER", y = "Total number of purchases", fill = "Gender") + 
+  ggtitle("Number of purchases by each user showing their gender") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+```
+
+Again, there is just one female user in the top 20. This is somewhat not accepting our second hypothesis of women spending more on shopping than men. To confirm this, let's look at the gender variable in terms of the number of purchases and also in terms of how much was spent on purchases
+
+```{r}
+df %>% ggplot(aes(Gender)) + geom_bar()
+```
+
+
+In the first instance, from the dataset, there are more men than women. As this is a selected dataset, it will be difficult to make bold conclusions as we do not know how the data was selected. The next step is to look at the total amount spent by both men and females. Remember that only the "train" labeled data have purchase amount linked to them. Hence we will restrict our totals to this section only.
+

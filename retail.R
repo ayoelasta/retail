@@ -33,25 +33,24 @@ summary(df)
 summarize(countt = n_distinct(User_ID)) %>%
   arrange(desc(countt)) %>%
 
-df %>% group_by(User_ID) %>% 
-  head(10) %>%
-  ggplot(aes(User_ID)) + geom_bar()
+  df %>% group_by(User_ID) %>%
+  summarize(tot = n(), gend = first(Gender)) %>%
+  arrange(desc(tot)) %>%
+  head(20) %>%
+  ggplot(aes(User_ID, tot, fill = gend)) + geom_bar(stat = "identity") +
+  labs(x = "USER", y = "Total number of purchases", fill = "Gender") + 
+  ggtitle("Number of purchases by each user showing their gender") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
-p2 <- df %>% arrange(desc(sumt)) %>% 
-  head(10) %>%
-  ggplot(aes(x = User_ID)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = palette_light()) +
-  theme_gray() +
-  theme(legend.position = "right") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-  labs(x = "", fill = "")
 
-p2
 
-df %>% count(User_ID) %>%
-  arrange(desc(n)) %>%
-  head(10) %>%
-  ggplot(aes(User_ID, n)) + geom_bar(stat = "identity")
-  
+# purchase count by gender
+df %>% ggplot(aes(Gender)) + geom_bar()
 
+# purchase amount by gender
+df %>% filter(source == "train") %>%
+  group_by(Gender) %>%
+  summarize(totalPurchases = sum(Purchase, na.rm = TRUE))
+
+
+df %>% filter(source == "train") %>% summary()  

@@ -1,0 +1,1 @@
+"0","df %>% ggplot(aes(Gender)) + geom_bar()"
