@@ -1,4 +1,0 @@
-"0","df %>% filter(source == ""train"") %>%"
-"0","  group_by(User_ID) %>%"
-"0","  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%"
-"0","  ggplot(aes(Occ,sumOcc)) + geom_bar(fill = ""blue"", stat = ""identity"")"

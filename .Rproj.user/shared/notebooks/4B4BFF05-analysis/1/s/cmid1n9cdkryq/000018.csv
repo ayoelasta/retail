@@ -1,0 +1,5 @@
+"0","df %>% filter(source == ""train"") %>%"
+"0","  group_by(Occupation) %>%"
+"0","  summarize(sumOcc = sum(Purchase), count = n()) %>%"
+"0","  ggplot(aes(Occupation,sumOcc)) + geom_bar(fill = ""blue"", stat = ""identity"") +"
+"0","  labs(x = ""Occupation"", y = ""Amount Spent on Purchases"", title = ""Amount spent per Occupation"")"

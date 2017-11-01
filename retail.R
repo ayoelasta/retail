@@ -74,3 +74,25 @@ df %>% filter(source == "train") %>%
   arrange(desc(summ))
 
 
+# Purchases made per occupation per gender
+df %>% filter(source == "train") %>%
+  group_by(User_ID) %>%
+  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n(), Gen = first(Gender)) %>%
+  ggplot(aes(Occ,sumOcc, fill = Gen)) + geom_bar(stat = "identity") +
+  labs(x = "Occupation", y = "Amount Spent on Purchases", title = "Amount spent per Occupation")
+
+# Ratio of males to females in Occupation 9
+df %>% filter(Occupation == 9) %>%
+  group_by(Gender) %>%
+  summarize(n = n())
+
+# Gender ration for all occupations
+df %>% group_by(Occupation, Gender) %>%
+  summarize(n = n()) %>%
+  mutate(freq = round(n / sum(n), 2)) %>%
+  ggplot(aes(Occupation, freq, fill = Gender)) + geom_bar(stat = "identity")
+
+
+df %>% filter(source == "train") %>%
+  group_by(Occupation, Gender) %>%
+  summarize(sumOcc = sum(Purchase), count = n())

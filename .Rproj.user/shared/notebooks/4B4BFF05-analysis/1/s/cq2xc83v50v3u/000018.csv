@@ -1,3 +1,0 @@
-"0","df %>% group_by(User_ID) %>%"
-"0","  summarize(Occ = first(Occupation)) %>%"
-"0","  ggplot(aes(Occ)) + geom_bar() + labs(x = ""Occupation"", y = ""No. of Purchases"", title = ""Number of purchases made based on Occupation"")"

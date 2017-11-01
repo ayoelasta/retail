@@ -111,7 +111,7 @@ summary(test)
 
 2. **Gender:** Women spend more on purchases than men
 
-3. **Occupation:** Certain types of occupations (dependent on salary band) will have higher purchases
+3. **Occupation:** Certain types of occupations will have higher purchases
 
 4. **Age:** The older you are, the less you purchase (count and amount spent)
 
@@ -200,9 +200,9 @@ In terms of the total purchases, there's a significant difference in the amount 
 The variable "Occupation" defines the occupation of the customers. The real occupation is masked so we only know they are from group 0 to 20. We do not know what these numbers stand for except that they refer to different occupations. 
 
 ```{r}
-df %>% group_by(User_ID) %>%
-  summarize(Occ = first(Occupation)) %>%
-  ggplot(aes(Occ)) + geom_bar() + labs(x = "Occupation", y = "No. of Purchases", title = "Number of purchases made based on Occupation")
+df %>% group_by(Occupation) %>%
+  summarize(Occ = n()) %>%
+  ggplot(aes(Occupation, Occ)) + geom_bar(stat = "identity") + labs(x = "Occupation", y = "No. of Purchases", title = "Number of purchases made based on Occupation")
 ```
 
 
@@ -210,17 +210,46 @@ Occupation 4 has the highest number of purchases followed by Occupation 0 and th
 
 ```{r}
 df %>% filter(source == "train") %>%
-  group_by(User_ID) %>%
-  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%
-  ggplot(aes(Occ,sumOcc)) + geom_bar(fill = "blue", stat = "identity")
+  group_by(Occupation) %>%
+  summarize(sumOcc = sum(Purchase), count = n()) %>%
+  ggplot(aes(Occupation,sumOcc)) + geom_bar(fill = "blue", stat = "identity") +
+  labs(x = "Occupation", y = "Amount Spent on Purchases", title = "Amount spent per Occupation")
 ```
+There are no suprises in terms of the amount spent compared with the number of purchases. Occupation 4 still leads (666244484) followed by Occupation 0 (635406958). This is due to the large differences between the count of purchases. 
 
-
-There are no suprises in terms of the amount spent compared with the number of purchases. Occupation 4 still leads (666244484) followed by Occupation 0 (635406958). This is due to the large differences between the count of purchases. When we take a cursory look at the Occupations with little differences in the counts of purchases, some slight deviations will be noticed. For example, whilst there's not much pronounced difference in the number of purchases made between occupations 15 and 13, the difference is noticeable in the amount of money spent. Also, occupation 13 seems to have made more purchases than occupation 11 but the latter spent more money on purchases than the former.
+It is more insightful to compare based on average amount spent per purchase. This is shown in the next plot.
 
 ```{r}
 df %>% filter(source == "train") %>%
-  group_by(User_ID) %>%
-  summarize(Occ = first(Occupation), sumOcc = sum(Purchase), count = n()) %>%
-  ggplot(aes(Occ,sumOcc)) + geom_bar(fill = "blue", stat = "identity")
+  group_by(Occupation) %>%
+  summarize(sumOcc = sum(Purchase), count = n(), mean1 = mean(Purchase)) %>%
+  ggplot(aes(Occupation,mean1)) + geom_bar(fill = "blue", stat = "identity") +
+  labs(x = "Occupation", y = "Average Amount Spent per Purchase", title = "Amount spent per Purchase by each Occupation")
+
 ```
+
+This average aggregated plot highlights which occupation tends to spend more money per purchase. As can be seen, Occupation 12, 15 and 17's money spent per purchase is close to 10000 which are the top 3 in this category. However, when compared to total amount spent on all purchases over this time period, occupation 12 and 15 don't seem to do well even though they are willing to spend a lot of money on one purchase. It is therefore imperative for the company to spend time targeting this groups of customers.
+
+The plot below shows the amount spent by gender per occupation. As mentioned earlier, seeing that men tend to spend more (per occupation) than women could be due to the fact that we have a very high difference between number of males compared to females in our data. That said, for some occupations like occupation 9, we see females spending more money than males. It is not surprising thatthere are a lot more women than men in this group as shown below.
+
+```{r}
+a1 <- df %>% filter(source == "train") %>%
+  group_by(Occupation, Gender) %>%
+  summarize(sumOcc = sum(Purchase), count = n()) %>%
+  ggplot(aes(Occupation,sumOcc, fill = Gender)) + geom_bar(stat = "identity") +
+  labs(x = "Occupation", y = "Amount Spent on Purchases", title = "Amount spent per Occupation")
+
+a2 <- df %>% group_by(Occupation, Gender) %>%
+  summarize(n = n()) %>%
+  mutate(freq = round(n / sum(n), 2)) %>%
+  ggplot(aes(Occupation, freq, fill = Gender)) + geom_bar(stat = "identity") +
+  labs(x = "Occupation", y = "Percentage per Occupation", title = "Gender % per Occupation") +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0, hjust = 0))
+
+grid.arrange(a1, a2, widths = c(0.5, 0.5))
+```
+
+
+Summarising this section, our hypothesis is allowed i.e. certain types of occupations spend more money than others. However, on single purchases, there is not much difference in terms of what occupations buy (note: this is dependent on the price range of items at this retail company)
+
+**Age**
