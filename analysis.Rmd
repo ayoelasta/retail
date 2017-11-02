@@ -253,3 +253,13 @@ grid.arrange(a1, a2, widths = c(0.5, 0.5))
 Summarising this section, our hypothesis is allowed i.e. certain types of occupations spend more money than others. However, on single purchases, there is not much difference in terms of what occupations buy (note: this is dependent on the price range of items at this retail company)
 
 **Age**
+
+```{r}
+df$Age <- as.factor(df$Age)
+```
+
+```{r}
+df %>% filter(source == "train") %>%
+  ggplot(aes(Age, Purchase)) + geom_bar(stat = "identity")
+```
+

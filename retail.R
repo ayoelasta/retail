@@ -96,3 +96,9 @@ df %>% group_by(Occupation, Gender) %>%
 df %>% filter(source == "train") %>%
   group_by(Occupation, Gender) %>%
   summarize(sumOcc = sum(Purchase), count = n())
+
+
+# Age
+df %>% filter(source == "train") %>%
+  ggplot(aes(Age, Purchase)) + geom_bar(stat = "identity")
+
