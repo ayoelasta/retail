@@ -284,8 +284,21 @@ Of the 5891 users in the training dataset, those in the 26 to 35 years old range
 
 ```{r}
 df %>% filter(source == "train") %>%
-  group_by(User_ID, Age) %>%
-  summarize(Age1 = first(Age)) %>%
-  ggplot(aes(Age1)) + geom_bar()
+  ggplot(aes(Age, Purchase)) + geom_bar(stat = "identity")
 ```
 
+```{r}
+df %>% filter(source == "train") %>%
+  group_by(Age) %>%
+  summarize(count = n(), avGPurchase = mean(Purchase)) %>%
+  ggplot(aes(Age, avGPurchase)) + geom_bar(stat = "identity")
+```
+
+Average purchases
+
+*Products*
+Which products are Popular?
+
+```{r}
+
+```
