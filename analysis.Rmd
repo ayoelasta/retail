@@ -276,6 +276,16 @@ df$Age <- as.factor(df$Age)
 ```{r}
 df %>% filter(source == "train") %>%
   group_by(User_ID, Age) %>%
-  ggplot(aes(Age)) + geom_bar()
+  summarize(Age1 = first(Age)) %>%
+  ggplot(aes(Age1)) + geom_bar()
+```
+
+Of the 5891 users in the training dataset, those in the 26 to 35 years old range form the highest population followed by 36-45 and 18-25 respectively. The 0-17 for the least population.
+
+```{r}
+df %>% filter(source == "train") %>%
+  group_by(User_ID, Age) %>%
+  summarize(Age1 = first(Age)) %>%
+  ggplot(aes(Age1)) + geom_bar()
 ```
 
