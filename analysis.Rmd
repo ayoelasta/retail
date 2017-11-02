@@ -99,6 +99,21 @@ test$Product_Category_3 <- as.factor(test$Product_Category_3)
 **Summary statistics:**
 
 ```{r}
+n_distinct(train$User_ID)
+n_distinct(test$User_ID)
+n_distinct(train$Product_ID)
+n_distinct(test$Product_ID)
+
+sum(is.na(train$User_ID))
+sum(is.na(test$User_ID))
+sum(is.na(train$Product_ID))
+sum(is.na(test$Product_ID))
+```
+
+The number of unique users is evenly distributed in the train and test datasets (5891). In addition, there are 3631 and 3491 unique products in the train and test datasets respectively. There are no missing valuesfor users and products
+
+
+```{r}
 summary(train)
 ```
 
@@ -260,6 +275,7 @@ df$Age <- as.factor(df$Age)
 
 ```{r}
 df %>% filter(source == "train") %>%
-  ggplot(aes(Age, Purchase)) + geom_bar(stat = "identity")
+  group_by(User_ID, Age) %>%
+  ggplot(aes(Age)) + geom_bar()
 ```
 

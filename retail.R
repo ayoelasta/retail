@@ -102,3 +102,5 @@ df %>% filter(source == "train") %>%
 df %>% filter(source == "train") %>%
   ggplot(aes(Age, Purchase)) + geom_bar(stat = "identity")
 
+df %>% filter(source == "train") %>%
+  
